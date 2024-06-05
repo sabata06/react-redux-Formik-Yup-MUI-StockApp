@@ -4,26 +4,33 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import LockIcon from "@mui/icons-material/Lock";
 import image from "../assets/result.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
 import { object, string } from "yup";
-import { login } from "../service/authApiCall";
+// import { login } from "../hooks/useAuthCall"
+import useAuthCall from "../hooks/useAuthCall";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { login } = useAuthCall();
+
+  //? harici validasyon şemasi
   const loginSchema = object({
     email: string()
-      .email("Lütfen geçerli bir mail giriniz")
+      .email("Lutfen valid bir email giriniz")
       .required("Bu alan zorunludur"),
     password: string()
       .required("Bu alan zorunludur")
-      .min(8, "En az 8 karakter olmalıdır")
-      .max(16, "En fazla 16 karakter olmalıdır")
-      .matches(/\d+/, "En az bir rakam olmalıdır"),
+      .min(8, "En az 8 karakter girilmelidir")
+      .max(16, "En fazla 16 karakter girilmelidir")
+      .matches(/\d+/, "En az bir rakam içermelidir.")
+      .matches(/[a-z]/, "En az bir küçük harf içermelidir.")
+      .matches(/[A-Z]/, "En az bir büyük harf içermelidir.")
+      .matches(/[!,?{}><%&$#£+-.]+/, "En az bir özel karekter içermelidir."),
   });
+
   return (
     <Container maxWidth="lg">
       <Grid
@@ -65,9 +72,7 @@ const Login = () => {
             initialValues={{ email: "", password: "" }}
             validationSchema={loginSchema}
             onSubmit={(values, action) => {
-              //* login işlmleri buraya yazılacak
-
-              login(values)
+              login(values);
               action.resetForm();
               action.setSubmitting(false);
             }}
