@@ -78,7 +78,6 @@ const useAuthCall = () => {
   };
 
   const register = async (userData) => {
-
     dispatch(fetchStart());
     try {
       const { data } = await axios.post(
@@ -91,10 +90,10 @@ const useAuthCall = () => {
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
-      toastErrorNotify("login islemi basarisiz");
+      toastErrorNotify("kayıt islemi basarisiz");
     }
   };
-  return { login, logout,register };
+  return { login, logout, register };
 };
 
 export default useAuthCall;
