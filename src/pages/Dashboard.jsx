@@ -10,10 +10,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MenuListItem from "../components/MenuListItem";
 import { Outlet } from "react-router-dom";
+import { Button } from "@mui/material";
+import useAuthCall from "../hooks/useAuthCall";
 
 const drawerWidth = 200;
 
 function Dashboard(props) {
+  const { logout } = useAuthCall();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -65,9 +68,12 @@ function Dashboard(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            Stock App
           </Typography>
+          <Button variant="contained" onClick={() => logout()} color="primary">
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Box
@@ -90,6 +96,8 @@ function Dashboard(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              backgroundColor: "secondary.main",
+             
             },
           }}
         >
@@ -102,6 +110,7 @@ function Dashboard(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              backgroundColor: "secondary.main",
             },
           }}
           open
