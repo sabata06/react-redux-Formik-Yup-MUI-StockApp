@@ -1,11 +1,14 @@
 import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFail, fetchStart, getFirmsSuccess } from "../features/stockSlice";
 
 const Firms = () => {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const getFirms = async () => {
+    dispatch(fetchStart());
     try {
       const { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/stock/firms/`,
@@ -14,8 +17,10 @@ const Firms = () => {
         }
       );
       console.log(data);
+      dispatch(getFirmsSuccess(data));
     } catch (error) {
       console.log(error);
+      dispatch(fetchFail());
     }
   };
 
