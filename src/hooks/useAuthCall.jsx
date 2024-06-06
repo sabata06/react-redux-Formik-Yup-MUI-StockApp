@@ -36,6 +36,7 @@ import {
   fetchStart,
   loginSuccess,
   logoutSuccess,
+  registerSuccess,
 } from "../features/authSlice";
 
 const useAuthCall = () => {
@@ -43,12 +44,12 @@ const useAuthCall = () => {
   const dispatch = useDispatch();
 
   const login = async (userData) => {
-    const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
+    // const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
 
     dispatch(fetchStart());
     try {
       const { data } = await axios.post(
-        `${BASE_URL}/account/auth/login/`,
+        `${import.meta.env.VITE_BASE_URL}/account/auth/login/`,
         userData
       );
       dispatch(loginSuccess(data));
@@ -61,11 +62,11 @@ const useAuthCall = () => {
     }
   };
   const logout = async () => {
-    const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
+    // const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
 
     dispatch(fetchStart());
     try {
-      await axios.post(`${BASE_URL}/account/auth/logout/`);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/account/auth/logout/`);
       dispatch(logoutSuccess());
       toastSuccessNotify("logout islemi basarili");
       navigate("/");
@@ -75,7 +76,25 @@ const useAuthCall = () => {
       toastErrorNotify("logout islemi basarisiz");
     }
   };
-  return { login, logout };
+
+  const register = async (userData) => {
+
+    dispatch(fetchStart());
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/account/register/`,
+        userData
+      );
+      dispatch(registerSuccess(data));
+      toastSuccessNotify("register islemi basarili");
+      navigate("/stock");
+    } catch (error) {
+      console.log(error);
+      dispatch(fetchFail());
+      toastErrorNotify("login islemi basarisiz");
+    }
+  };
+  return { login, logout,register };
 };
 
 export default useAuthCall;
