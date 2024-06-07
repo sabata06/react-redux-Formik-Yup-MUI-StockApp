@@ -8,8 +8,7 @@ import useStockCall from "../hooks/useStockCall";
 const Firms = () => {
   // const dispatch = useDispatch();
   // const { token } = useSelector((state) => state.auth);
-  const { firms } = useSelector((state) => state.stock);
-  const { getFirms } = useStockCall();
+
   // const getFirms = async () => {
   //   dispatch(fetchStart());
   //   try {
@@ -28,8 +27,11 @@ const Firms = () => {
   //   }
   // };
 
+  const { firms } = useSelector((state) => state.stock);
+  const { getStockData } = useStockCall();
+
   useEffect(() => {
-    getFirms();
+    getStockData("firms");
   }, []);
 
   return (
