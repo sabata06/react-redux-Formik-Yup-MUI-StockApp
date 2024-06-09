@@ -9,6 +9,12 @@ const Firms = () => {
   const { firms } = useSelector((state) => state.stock);
   const { getStockData } = useStockCall();
   const [open, setOpen] = useState(false);
+  const [info, setInfo] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    image: "",
+  });
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -24,11 +30,21 @@ const Firms = () => {
       <Button variant="contained" color="primary" onClick={handleOpen}>
         NEW FIRM
       </Button>
-      <FirmModal handleClose={handleClose} open={open} />
+      <FirmModal
+        handleClose={handleClose}
+        open={open}
+        info={info}
+        setInfo={setInfo}
+      />
       <Grid container justifyContent={"center"} spacing={2}>
         {firms?.map((firm) => (
           <Grid item key={firm.id}>
-            <FirmCard firm={firm} handleOpen={handleOpen} />
+            <FirmCard
+              firm={firm}
+              handleOpen={handleOpen}
+              info={info}
+              setInfo={setInfo}
+            />
           </Grid>
         ))}
       </Grid>

@@ -8,14 +8,17 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 import useStockCall from "../hooks/useStockCall";
 
-export default function FirmModal({ handleClose, open }) {
+export default function FirmModal({ handleClose, open, info, setInfo }) {
   const { postStockData } = useStockCall();
-  const [info, setInfo] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    image: "",
-  });
+  console.log(info)
+
+  //!FirmCard komponentinde de ihtiyaç olduğu için Firm parent componentine taşındı
+  // const [info, setInfo] = useState({
+  //   name: "",
+  //   phone: "",
+  //   address: "",
+  //   image: "",
+  // });
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
