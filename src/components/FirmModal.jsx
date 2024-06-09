@@ -9,8 +9,8 @@ import { useState } from "react";
 import useStockCall from "../hooks/useStockCall";
 
 export default function FirmModal({ handleClose, open, info, setInfo }) {
-  const { postStockData } = useStockCall();
-  console.log(info)
+  const { postStockData, putStockData } = useStockCall();
+  console.log(info);
 
   //!FirmCard komponentinde de ihtiyaç olduğu için Firm parent componentine taşındı
   // const [info, setInfo] = useState({
@@ -24,9 +24,13 @@ export default function FirmModal({ handleClose, open, info, setInfo }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (info.id) {
+      putStockData("firms", info);
+    } else {
+      postStockData("firms", info);
+    }
     console.log(info);
     postStockData("firms", info);
-    setInfo({ name: "", phone: "", address: "", image: "" });
     handleClose();
   };
   return (

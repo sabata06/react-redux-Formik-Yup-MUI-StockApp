@@ -16,7 +16,9 @@ const Firms = () => {
     image: "",
   });
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setInfo({ name: "", phone: "", address: "", image: "" }), setOpen(false);
+  };
 
   useEffect(() => {
     getStockData("firms");
