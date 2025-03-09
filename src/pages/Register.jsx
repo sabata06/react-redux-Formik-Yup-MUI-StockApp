@@ -12,6 +12,8 @@ import useAuthCall from "../hooks/useAuthCall";
 
 const Register = () => {
   const { register } = useAuthCall();
+  const { loading, error } = useSelector((state) => state.auth);
+
   return (
     <Container maxWidth="lg">
       <Grid
@@ -47,35 +49,41 @@ const Register = () => {
             mb={2}
             color="secondary.light"
           >
-            Register
+            Kayıt Ol
           </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Kayıt işlemi başarısız oldu. Lütfen bilgilerinizi kontrol ediniz.
+            </Alert>
+          )}
 
           <Formik
             initialValues={{
-              username: "",
+              email: "",
               first_name: "",
               last_name: "",
-              email: "",
               password: "",
+              password2: "",
             }}
             validationSchema={registerSchema}
             onSubmit={(values, actions) => {
-              //TODO register(values)
-              register({ ...values, password2: values.password });
+              register(values);
               actions.resetForm();
               actions.setSubmitting(false);
             }}
-            component={(props) => <RegisterForm {...props} />}
-          ></Formik>
+          >
+            {(formikProps) => <RegisterForm {...formikProps} />}
+          </Formik>
 
           <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Link to="/">Do you have an account?</Link>
+            <Link to="/login">Zaten bir hesabınız var mı? Giriş yapın</Link>
           </Box>
         </Grid>
 
         <Grid item xs={0} sm={7} md={6}>
           <Container>
-            <img src={image} alt="" />
+            <img src={image} alt="register" style={{ maxWidth: "100%" }} />
           </Container>
         </Grid>
       </Grid>

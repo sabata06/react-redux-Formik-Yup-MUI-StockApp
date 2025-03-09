@@ -3,74 +3,73 @@ import {
   fetchStart,
   getStockSuccess,
   getProdCatBrandsSuccess,
-} from "../features/stockSlice";
-import { useDispatch } from "react-redux";
-import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
-import useAxios from "./useAxios";
+} from "../features/stockSlice"
+import { useDispatch } from "react-redux"
+import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify"
+import useAxios from "./useAxios"
 
 const useStockCall = () => {
-  const dispatch = useDispatch();
-  const { axiosWithToken } = useAxios();
+  const dispatch = useDispatch()
+  const { axiosWithToken } = useAxios()
 
   const getStockData = async (url) => {
-    dispatch(fetchStart());
+    dispatch(fetchStart())
     try {
-      const { data } = await axiosWithToken(`/stock/${url}/`);
-      dispatch(getStockSuccess({ data, url }));
-      console.log(data);
+      const { data } = await axiosWithToken(`/stock/${url}/`)
+      dispatch(getStockSuccess({ data, url }))
     } catch (error) {
-      dispatch(fetchFail());
-      console.log(error);
+      dispatch(fetchFail())
+      console.log(error)
     }
-  };
+  }
 
   const deleteStockData = async (url, id) => {
-    dispatch(fetchStart());
+    dispatch(fetchStart())
     try {
-      await axiosWithToken.delete(`/stock/${url}/${id}/`);
-      toastSuccessNotify(`${url} succesfuly deleted`);
-      getStockData(url);
+      await axiosWithToken.delete(`/stock/${url}/${id}/`)
+      toastSuccessNotify(`${url} succesfuly deleted`)
+      getStockData(url)
     } catch (error) {
-      dispatch(fetchFail());
-      toastErrorNotify(`${url} can not be deleted`);
-      console.log(error);
+      dispatch(fetchFail())
+      toastErrorNotify(`${url} can not be deleted`)
+      console.log(error)
     }
-  };
+  }
 
   const postStockData = async (url, info) => {
-    dispatch(fetchStart());
+    dispatch(fetchStart())
     try {
-      await axiosWithToken.post(`/stock/${url}/`, info);
-      toastSuccessNotify(`${url} succesfuly posted`);
-      getStockData(url);
+      await axiosWithToken.post(`/stock/${url}/`, info)
+      toastSuccessNotify(`${url} succesfuly posted`)
+      getStockData(url)
     } catch (error) {
-      dispatch(fetchFail());
-      toastErrorNotify(`${url} can not be posted`);
-      console.log(error);
+      dispatch(fetchFail())
+      toastErrorNotify(`${url} can not be posted`)
+      console.log(error)
     }
-  };
+  }
 
   const putStockData = async (url, info) => {
-    dispatch(fetchStart());
+    dispatch(fetchStart())
     try {
-      await axiosWithToken.put(`/stock/${url}/${info.id}/`, info);
-      toastSuccessNotify(`${url} succesfuly updated`);
-      getStockData(url);
+      await axiosWithToken.put(`/stock/${url}/${info.id}/`, info)
+      toastSuccessNotify(`${url} succesfuly updated`)
+      getStockData(url)
     } catch (error) {
-      dispatch(fetchFail());
-      toastErrorNotify(`${url} can not be updated`);
-      console.log(error);
+      dispatch(fetchFail())
+      toastErrorNotify(`${url} can not be updated`)
+      console.log(error)
     }
-  };
+  }
   // ? Products, categories ve brands isteklerinin Promise.all ile es zamanli alinmasi.
   const getProdCatBrands = async () => {
-    dispatch(fetchStart());
+    dispatch(fetchStart())
     try {
       const [products, categories, brands] = await Promise.all([
         axiosWithToken.get("stock/products/"),
         axiosWithToken.get("stock/categories/"),
         axiosWithToken.get("stock/brands/"),
-      ]);
+      ])
 
       dispatch(
         getProdCatBrandsSuccess([
@@ -78,13 +77,13 @@ const useStockCall = () => {
           categories?.data,
           brands?.data,
         ])
-      );
+      )
     } catch (error) {
-      console.log(error);
-      dispatch(fetchFail());
-      toastErrorNotify(`Data can not be fetched`);
+      console.log(error)
+      dispatch(fetchFail())
+      toastErrorNotify(`Data can not be fetched`)
     }
-  };
+  }
 
   return {
     getStockData,
@@ -92,7 +91,7 @@ const useStockCall = () => {
     postStockData,
     putStockData,
     getProdCatBrands,
-  };
-};
+  }
+}
 
-export default useStockCall;
+export default useStockCall

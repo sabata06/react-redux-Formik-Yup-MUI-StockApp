@@ -1,52 +1,41 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import MenuListItem from "../components/MenuListItem";
-import { Outlet } from "react-router-dom";
-import { Button } from "@mui/material";
-import useAuthCall from "../hooks/useAuthCall";
+import * as React from "react"
+import AppBar from "@mui/material/AppBar"
+import Box from "@mui/material/Box"
+import CssBaseline from "@mui/material/CssBaseline"
+import Divider from "@mui/material/Divider"
+import Drawer from "@mui/material/Drawer"
+import IconButton from "@mui/material/IconButton"
 
-const drawerWidth = 200;
+import MenuIcon from "@mui/icons-material/Menu"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+
+import MenuListItems from "../components/MenuListItems"
+import { Outlet } from "react-router-dom"
+import useAuthCall from "../hooks/useAuthCall"
+
+const drawerWidth = 200
 
 function Dashboard(props) {
-  const { logout } = useAuthCall();
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
-
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
-
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
+  const { logout } = useAuthCall()
+  const { window } = props
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
-      <MenuListItem />
+      <MenuListItems />
     </div>
-  );
+  )
 
-  // Remove this const when copying and pasting into your project.
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    window !== undefined ? () => window().document.body : undefined
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -71,7 +60,8 @@ function Dashboard(props) {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Stock App
           </Typography>
-          <Button variant="contained" onClick={() => logout()} color="primary">
+
+          <Button variant="contained" onClick={() => logout()}>
             Logout
           </Button>
         </Toolbar>
@@ -86,8 +76,7 @@ function Dashboard(props) {
           container={container}
           variant="temporary"
           open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
+          onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
@@ -97,7 +86,6 @@ function Dashboard(props) {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "secondary.main",
-             
             },
           }}
         >
@@ -130,7 +118,7 @@ function Dashboard(props) {
         <Outlet />
       </Box>
     </Box>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard

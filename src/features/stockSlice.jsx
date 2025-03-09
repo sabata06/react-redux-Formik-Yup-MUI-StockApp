@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 
 const stockSlice = createSlice({
   name: "stock",
@@ -15,20 +15,20 @@ const stockSlice = createSlice({
   },
   reducers: {
     fetchStart: (state) => {
-      state.loading = true;
-      state.error = false;
+      state.loading = true
+      state.error = false
     },
     getStockSuccess: (state, { payload }) => {
-      state.loading = false;
-      state[payload.url] = payload.data;
+      state.loading = false
+      state[payload.url] = payload.data
     },
 
     // ? Products, categories ve brands state'lerini güncelleyen action fonks.
     getProdCatBrandsSuccess: (state, { payload }) => {
-      state.loading = false;
-      state.products = payload[0];
-      state.categories = payload[1];
-      state.brands = payload[2];
+      state.loading = false
+      state.products = payload[0]
+      state.categories = payload[1]
+      state.brands = payload[2]
     },
 
     // getFirmsSuccess: (state, { payload }) => {
@@ -45,16 +45,16 @@ const stockSlice = createSlice({
     // },
 
     fetchFail: (state) => {
-      state.loading = false;
-      state.error = true;
+      state.loading = false
+      state.error = true
     },
   },
-});
+})
 
 export const {
   fetchStart,
   fetchFail,
   getStockSuccess,
   getProdCatBrandsSuccess,
-} = stockSlice.actions;
-export default stockSlice.reducer;
+} = stockSlice.actions
+export default stockSlice.reducer

@@ -10,25 +10,27 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
 import { object, string } from "yup";
-// import { login } from "../hooks/useAuthCall"
 import useAuthCall from "../hooks/useAuthCall";
+import { useSelector } from "react-redux";
+import Alert from "@mui/material/Alert";
 
 const Login = () => {
   const { login } = useAuthCall();
+  const { loading, error } = useSelector((state) => state.auth);
 
-  //? harici validasyon şemasi
+  //? harici validasyon şeması
   const loginSchema = object({
     email: string()
-      .email("Lutfen valid bir email giriniz")
+      .email("Lütfen geçerli bir email giriniz")
       .required("Bu alan zorunludur"),
     password: string()
       .required("Bu alan zorunludur")
-      .min(8, "En az 8 karakter girilmelidir")
-      .max(16, "En fazla 16 karakter girilmelidir")
-      .matches(/\d+/, "En az bir rakam içermelidir.")
-      .matches(/[a-z]/, "En az bir küçük harf içermelidir.")
-      .matches(/[A-Z]/, "En az bir büyük harf içermelidir.")
-      .matches(/[!,?{}><%&$#£+-.]+/, "En az bir özel karekter içermelidir."),
+      // .min(8, "En az 8 karakter girilmelidir")
+      // .max(16, "En fazla 16 karakter girilmelidir")
+      // .matches(/\d+/, "En az bir rakam içermelidir.")
+      // .matches(/[a-z]/, "En az bir küçük harf içermelidir.")
+      // .matches(/[A-Z]/, "En az bir büyük harf içermelidir.")
+      // .matches(/[!,?{}><%&$#£+-.]+/, "En az bir özel karakter içermelidir."),
   });
 
   return (
@@ -65,8 +67,14 @@ const Login = () => {
             mb={4}
             color="secondary.light"
           >
-            Login
+            Giriş
           </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Giriş yapılamadı. Lütfen bilgilerinizi kontrol ediniz.
+            </Alert>
+          )}
 
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -90,10 +98,10 @@ const Login = () => {
                     onBlur={handleBlur}
                     value={values.email}
                     error={touched.email && Boolean(errors.email)}
-                    helperText={errors.email}
+                    helperText={touched.email && errors.email}
                   />
                   <TextField
-                    label="password"
+                    label="Şifre"
                     name="password"
                     id="password"
                     type="password"
@@ -102,10 +110,14 @@ const Login = () => {
                     onBlur={handleBlur}
                     value={values.password}
                     error={touched.password && Boolean(errors.password)}
-                    helperText={errors.password}
+                    helperText={touched.password && errors.password}
                   />
-                  <Button variant="contained" type="submit">
-                    Submit
+                  <Button 
+                    variant="contained" 
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? "Giriş Yapılıyor..." : "Giriş Yap"}
                   </Button>
                 </Box>
               </Form>
@@ -113,13 +125,13 @@ const Login = () => {
           </Formik>
 
           <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Link to="/register">Do you have not an account?</Link>
+            <Link to="/register">Hesabınız yok mu? Kayıt olun</Link>
           </Box>
         </Grid>
 
         <Grid item xs={10} sm={7} md={6}>
           <Container>
-            <img src={image} alt="img" />
+            <img src={image} alt="login" style={{ maxWidth: "100%" }} />
           </Container>
         </Grid>
       </Grid>

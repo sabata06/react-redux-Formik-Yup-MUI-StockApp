@@ -1,38 +1,37 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { modalStyle } from "../styles/globalStyles";
-import { TextField } from "@mui/material";
-import { useState } from "react";
-import useStockCall from "../hooks/useStockCall";
+import { useState } from "react"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Typography from "@mui/material/Typography"
+import TextField from "@mui/material/TextField"
+import Modal from "@mui/material/Modal"
+import { modalStyle } from "../styles/globalStyles"
+import useStockCall from "../hooks/useStockCall"
 
-export default function FirmModal({ handleClose, open, info, setInfo }) {
-  const { postStockData, putStockData } = useStockCall();
-  console.log(info);
+export default function FirmModal({ open, handleClose, info, setInfo }) {
+  const { postStockData, putStockData } = useStockCall()
+  //   const [info, setInfo] = useState({
+  //     name: "",
+  //     phone: "",
+  //     address: "",
+  //     image: "",
+  //   })
 
-  //!FirmCard komponentinde de ihtiyaç olduğu için Firm parent componentine taşındı
-  // const [info, setInfo] = useState({
-  //   name: "",
-  //   phone: "",
-  //   address: "",
-  //   image: "",
-  // });
   const handleChange = (e) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
-  };
+    // const { name, value } = e.target
+    setInfo({ ...info, [e.target.name]: e.target.value })
+  }
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    console.log(info.id)
     if (info.id) {
-      putStockData("firms", info);
+      putStockData("firms", info)
     } else {
-      postStockData("firms", info);
+      postStockData("firms", info)
     }
-    console.log(info);
-    postStockData("firms", info);
-    handleClose();
-  };
+
+    handleClose()
+  }
   return (
     <div>
       <Modal
@@ -44,7 +43,7 @@ export default function FirmModal({ handleClose, open, info, setInfo }) {
         <Box sx={modalStyle}>
           <Box
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-            component={"form"}
+            component="form"
             onSubmit={handleSubmit}
           >
             <TextField
@@ -53,40 +52,43 @@ export default function FirmModal({ handleClose, open, info, setInfo }) {
               id="name"
               type="text"
               variant="outlined"
-              required
               value={info?.name}
+              required
               onChange={handleChange}
             />
+
             <TextField
               label="Phone"
               name="phone"
               id="phone"
               type="tel"
               variant="outlined"
-              required
               value={info?.phone}
+              required
               onChange={handleChange}
             />
             <TextField
               label="Address"
               name="address"
-              id="adress"
-              type="address"
+              id="address"
+              type="text"
               variant="outlined"
-              required
               value={info?.address}
+              required
               onChange={handleChange}
             />
+
             <TextField
               label="Image"
               name="image"
               id="image"
               type="url"
               variant="outlined"
-              required
               value={info?.image}
+              required
               onChange={handleChange}
             />
+
             <Button variant="contained" type="submit">
               Submit
             </Button>
@@ -94,5 +96,5 @@ export default function FirmModal({ handleClose, open, info, setInfo }) {
         </Box>
       </Modal>
     </div>
-  );
+  )
 }

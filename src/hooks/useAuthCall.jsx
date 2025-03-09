@@ -1,32 +1,3 @@
-// import axios from "axios";
-// import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
-// import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { fetchFail, fetchStart, loginSuccess } from "../features/authSlice";
-
-// // //? Bir hook sadece bir react component ve bir custom hook icersinde cagrilabilir. Bir Js fonksiyonu icerisinde hook cagiralamaz.
-
-// export const login = async (userData) => {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-
-//   const BASE_URL = "meyymetbaba.pythonanywhere.com";
-
-//   dispatch(fetchStart());
-//   try {
-//     const { data } = await axios.post(
-//       `${BASE_URL}/account/auth/login/`,
-//       userData
-//     );
-//     dispatch(loginSuccess(data));
-//     toastSuccessNotify("login islemi basarili");
-//     navigate("/stock");
-//   } catch (error) {
-//     console.log(error);
-//     dispatch(fetchFail());
-//   }
-// };
-
 import axios from "axios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 import { useNavigate } from "react-router-dom";
@@ -43,56 +14,76 @@ const useAuthCall = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const login = async (userData) => {
-    // const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
+  // API'ye göre yolu değiştirdim - Render'daki backend URL'i
+  const BASE_URL = "https://stock-tracking-app-backend.onrender.com/api";
 
+  const login = async (userData) => {
     dispatch(fetchStart());
     try {
+      // Swagger'a göre /accounts/login/ endpoint'ini kullanıyoruz
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/account/auth/login/`,
+        `${BASE_URL}/accounts/login/`,
         userData
       );
+      
       dispatch(loginSuccess(data));
-      toastSuccessNotify("login islemi basarili");
+      
+      // JWT token'ları localStorage'a kaydetme
+      localStorage.setItem("access", data.access);
+      localStorage.setItem("refresh", data.refresh);
+      
+      toastSuccessNotify("Giriş işlemi başarılı");
       navigate("/stock");
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
-      toastErrorNotify("login islemi basarisiz");
+      toastErrorNotify("Giriş işlemi başarısız");
     }
   };
-  const logout = async () => {
-    // const BASE_URL = "https://meyymetbaba.pythonanywhere.com";
 
+  const logout = async () => {
     dispatch(fetchStart());
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/account/auth/logout/`);
+      // JWT kullandığınız için server-side logout gerekli olmayabilir
+      // Sadece client-side token temizliği yeterli
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      
       dispatch(logoutSuccess());
-      toastSuccessNotify("logout islemi basarili");
+      toastSuccessNotify("Çıkış işlemi başarılı");
       navigate("/");
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
-      toastErrorNotify("logout islemi basarisiz");
+      toastErrorNotify("Çıkış işlemi başarısız");
     }
   };
 
   const register = async (userData) => {
     dispatch(fetchStart());
     try {
+      // Swagger'a göre /accounts/register/ endpoint'ini kullanıyoruz
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/account/register/`,
+        `${BASE_URL}/accounts/register/`,
         userData
       );
+      
+      // Kayıt işlemi sonrasında login olmak için token alıyorsak
+      // burada loginSuccess dispatch etmek yerine
+      // kayıt sonrası login sayfasına yönlendirme daha uygun olabilir
+      // Ancak API'niz kayıt sonrası token döndürüyorsa:
+      
       dispatch(registerSuccess(data));
-      toastSuccessNotify("register islemi basarili");
-      navigate("/stock");
+      
+      toastSuccessNotify("Kayıt işlemi başarılı");
+      navigate("/login"); // veya doğrudan stock sayfasına gitmek için "/stock"
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
-      toastErrorNotify("kayıt islemi basarisiz");
+      toastErrorNotify("Kayıt işlemi başarısız");
     }
   };
+  
   return { login, logout, register };
 };
 
