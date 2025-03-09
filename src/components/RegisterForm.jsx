@@ -19,7 +19,7 @@ export const registerSchema = object({
   // .matches(/[!,?{}><%&$#£+-.]+/, "Şifre bir özel karakter içermelidir"),
   password2: string()
     .required("Şifre tekrarı zorunludur")
-    .oneOf([object.ref("password")], "Şifreler eşleşmelidir"),
+    // .oneOf([object.ref("password")], "Şifreler eşleşmelidir"),
 });
 
 const RegisterForm = ({

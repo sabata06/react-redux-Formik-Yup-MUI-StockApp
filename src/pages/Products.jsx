@@ -4,36 +4,58 @@ import Button from "@mui/material/Button"
 import { useSelector } from "react-redux"
 import useStockCall from "../hooks/useStockCall"
 import ProductModal from "../components/ProductModal"
-import ProductTable from "../components/Producttable"
+import ProductTable from "../components/ProductTable"
+import Box from "@mui/material/Box"
+import CircularProgress from "@mui/material/CircularProgress"
 
 const Products = () => {
-  const { getStockData, getProdCatBrands } = useStockCall()
-  const { products } = useSelector((state) => state.stock)
+  // Eski ve yeni fonksiyonları kullan
+  const { getStockData, getProdCatBrands, getProducts, getCategories, getAllProductData } = useStockCall()
+  const { products, loading } = useSelector((state) => state.stock)
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   useEffect(() => {
-    // getStockData("products")
-    // getStockData("categories")
-    // getStockData("brands")
-
-    //! Promise.all ile es zamanli istek atilan fonks.
-    getProdCatBrands()
+    // Render.com API'nize göre ürünleri getir
+    getProducts()
+    getCategories()
+    
+    // Alternatif olarak tüm verileri birden getir
+    // getAllProductData()
   }, [])
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <div>
-      <Typography variant="h4" color={"error"} mb={3}>
-        Products
+      <Typography variant="h4" color="primary" mb={3}>
+        Ürünler
       </Typography>
-      <Button variant="contained" onClick={handleOpen}>
-        NEW PRODUCT
+      <Button 
+        variant="contained" 
+        onClick={handleOpen}
+        sx={{ mb: 3 }}
+      >
+        YENİ ÜRÜN EKLE
       </Button>
 
       <ProductModal open={open} handleClose={handleClose} />
-      <ProductTable />
+      
+      {products?.length > 0 ? (
+        <ProductTable />
+      ) : (
+        <Typography variant="h6" color="textSecondary" sx={{ mt: 4, textAlign: 'center' }}>
+          Henüz ürün bulunmamaktadır. Yeni ürün eklemek için yukarıdaki butonu kullanabilirsiniz.
+        </Typography>
+      )}
     </div>
   )
 }
